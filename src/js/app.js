@@ -1,4 +1,4 @@
-import Bowman from './bowman.js';
+/* import Bowman from './bowman.js';
 import Swordsman from './swordsman.js';
 import Magician from './magician.js';
 import Undead from './undead.js';
@@ -17,4 +17,4 @@ console.log(swordsman);
 console.log(magician);
 console.log(undead);
 console.log(zombie);
-console.log(daemon);
+console.log(daemon); */

@@ -1,68 +1,59 @@
-import Bowman from "../bowman.js";
-import Daemon from "../daemon.js";
-import Magician from "../magician.js";
-import Swordsman from "../swordsman.js";
-import Undead from "../undead.js";
-import Zombie from "../zombie.js";
+import Character from "../character.js";
 
 describe("Character", () => {
-  it("should create a new Bowman character", () => {
-    const character = new Bowman("Klark");
-    expect(character.name).toBe("Klark");
-    expect(character.type).toBe("Bowman");
-    expect(character.health).toBe(100);
-    expect(character.level).toBe(1);
-    expect(character.attack).toBe(25);
-    expect(character.defence).toBe(25);
+  let character;
+
+  beforeEach(() => {
+    character = new Character("Test");
   });
 
-  it("should create a new Daemon character", () => {
-    const character = new Daemon("Uburu");
-    expect(character.name).toBe("Uburu");
-    expect(character.type).toBe("Daemon");
-    expect(character.health).toBe(100);
-    expect(character.level).toBe(1);
-    expect(character.attack).toBe(10);
-    expect(character.defence).toBe(40);
+  describe("levelUp", () => {
+    it("should increase level by 1", () => {
+      character.levelUp();
+      expect(character.level).toBe(2);
+    });
+
+    it("should increase attack and defence by 20%", () => {
+      character.levelUp();
+      expect(character.attack).toBe(12);
+      expect(character.defence).toBe(12);
+    });
+
+    it("should set health to 100", () => {
+      character.health = 50;
+      character.levelUp();
+      expect(character.health).toBe(100);
+    });
+
+    it("should throw an error if health is 0", () => {
+      character.health = 0;
+      expect(() => {
+        character.levelUp();
+      }).toThrowError("нельзя повысить левел умершего");
+    });
   });
 
-  it("should create a new Magician character", () => {
-    const character = new Magician("Merlin");
-    expect(character.name).toBe("Merlin");
-    expect(character.type).toBe("Magician");
-    expect(character.health).toBe(100);
-    expect(character.level).toBe(1);
-    expect(character.attack).toBe(10);
-    expect(character.defence).toBe(40);
-  });
+  describe("damage", () => {
+    it("should decrease health by damage points", () => {
+      character.damage(25);
+      expect(character.health).toBe(80);
+    });
 
-  it("should create a new Swordsman character", () => {
-    const character = new Swordsman("Arthur");
-    expect(character.name).toBe("Arthur");
-    expect(character.type).toBe("Swordsman");
-    expect(character.health).toBe(100);
-    expect(character.level).toBe(1);
-    expect(character.attack).toBe(40);
-    expect(character.defence).toBe(10);
-  });
+    it("should calculate health after taking into account defence", () => {
+      character.defence = 50;
+      character.damage(50);
+      expect(character.health).toBe(75);
+    });
 
-  it("should create a new Undead character", () => {
-    const character = new Undead("Dracula");
-    expect(character.name).toBe("Dracula");
-    expect(character.type).toBe("Undead");
-    expect(character.health).toBe(100);
-    expect(character.level).toBe(1);
-    expect(character.attack).toBe(25);
-    expect(character.defence).toBe(25);
-  });
+    it("should not allow health to go below 0", () => {
+      character.damage(200);
+      expect(character.health).toBe(0);
+    });
 
-  it("should create a new Zombie character", () => {
-    const character = new Zombie("Zack");
-    expect(character.name).toBe("Zack");
-    expect(character.type).toBe("Zombie");
-    expect(character.health).toBe(100);
-    expect(character.level).toBe(1);
-    expect(character.attack).toBe(40);
-    expect(character.defence).toBe(10);
+    it("should not decrease health if health is already 0", () => {
+      character.health = 0;
+      character.damage(50);
+      expect(character.health).toBe(0);
+    });
   });
 });
